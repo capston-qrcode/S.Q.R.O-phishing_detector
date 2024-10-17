@@ -10,6 +10,7 @@ BERT 모델 기반 멀티모달 피싱 사이트 탐지기, Secure QR Operations
 - HTML raw -> URL 추출 : Beautiful Soup HTML parser
 - BERT의 keras 구현체 : keras-bert
 - formatter / linter : black&isort / flake8
+- testing : pytest
 
 # Guide
 

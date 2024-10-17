@@ -1,6 +1,15 @@
 # --------------------------------------------------------------------------
-# keras backend를 호출하는 메인 routine 모듈입니다.
+# Custom Exceptions
 # --------------------------------------------------------------------------
-from sqro import run_keras_backend
 
-run_keras_backend()
+
+class LayerExceptions(Exception):
+    pass
+
+
+class ModelException(Exception):
+    pass
+
+
+class BackendException(Exception):
+    pass
