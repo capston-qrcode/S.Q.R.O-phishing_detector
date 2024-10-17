@@ -8,5 +8,6 @@ class Gelu(Layer):
     """
     Gelu function custom impl class
     """
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

@@ -8,8 +8,13 @@ class MultiHeadSelfAttention:
     """
     Attention head impl class
     """
+
     def __init__(self):
         pass
 
     def __call__(self, *args, **kwargs):
         pass
+
+
+def finetune_bert() -> None:
+    pass

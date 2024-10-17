@@ -30,3 +30,7 @@ def run_keras_backend() -> None:
     :return:
     """
     pass
+
+
+if __name__ == "__main__":
+    run_keras_backend()

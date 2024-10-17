@@ -16,6 +16,7 @@ class Embedding(Layer):
     """
     Layer impl class
     """
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
