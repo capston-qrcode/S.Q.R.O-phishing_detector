@@ -1,0 +1,28 @@
+[tool.black]
+line-length = 80
+
+[tool.poetry]
+name = "s-q-r-o-phishing-detector"
+version = "0.1.0"
+description = ""
+authors = ["bnbong <bbbong9@gmail.com>"]
+readme = "README.md"
+packages = [{include = "s"}]
+
+[tool.poetry.dependencies]
+python = "3.12.4"
+beautifulsoup4 = "^4.12.3"
+html2text = "^2024.2.26"
+langdetect = "^1.0.9"
+keras-bert = "^0.89.0"
+keras = "^3.6.0"
+tensorflow = "^2.17.0"
+pytest = "^8.3.3"
+black = "^24.10.0"
+flake8 = "^7.1.1"
+isort = "^5.13.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
