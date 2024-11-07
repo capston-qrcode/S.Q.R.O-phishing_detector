@@ -1,7 +1,7 @@
 import logging
 import logging.handlers
 
-from src.core.settings import AppSettings
+from web.src.core.settings import AppSettings
 
 
 LOGGING_FORMAT = (
@@ -14,11 +14,7 @@ LOGGING_FORMAT = (
 )
 
 
-def init_logger(
-    root_logger_name: str, app_settings: AppSettings
-) -> logging.Logger:
-    app_logger_level = (
-        logging.DEBUG if app_settings.LOGGING_DEBUG_LEVEL else logging.INFO
-    )
+def init_logger(root_logger_name: str, app_settings: AppSettings) -> logging.Logger:
+    app_logger_level = logging.DEBUG if app_settings.LOGGING_DEBUG_LEVEL else logging.INFO
 
     logging.basicConfig(level=app_logger_level, format=LOGGING_FORMAT)

@@ -42,9 +42,7 @@ class AppSettings(BaseSettings):
         default=True,
         description="If True, allow non-cerficiated users to get ESP token.",
     )
-    BACKEND_CORS_ORIGINS: Annotated[
-        list[AnyUrl] | str, BeforeValidator(parse_cors)
-    ] = []
+    BACKEND_CORS_ORIGINS: Annotated[list[AnyUrl] | str, BeforeValidator(parse_cors)] = []
     THREAD_POOL_SIZE: Optional[int] = Field(
         default=10,
         description="Change the server's thread pool size to handle non-async function",
