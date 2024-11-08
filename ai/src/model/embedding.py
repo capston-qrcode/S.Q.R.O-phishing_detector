@@ -1,24 +1,19 @@
 # --------------------------------------------------------------------------
-# 커스텀 임베딩을 설정하는 모듈입니다.
+# 커스텀 임베딩 레이어 설정을 위한 모듈입니다.
 # --------------------------------------------------------------------------
-import numpy as np
-
-from keras.api.layers import Layer
-
-
-def _get_matrix() -> np.array:
-    result = np.array([])
-
-    return result
+from keras.api.layers import Embedding, Dropout, Layer
+from ai.src.core.settings import TransformerSettings
 
 
-class Embedding(Layer):
-    """
-    Layer impl class
-    """
+class CustomEmbedding(Layer):
+    def __init__(self, settings: TransformerSettings):
+        super(CustomEmbedding, self).__init__()
+        self.embedding = Embedding(input_dim=settings.vocab_size,
+                                   output_dim=settings.embedding_dim,
+                                   trainable=True)
+        self.dropout = Dropout(settings.embedding_dropout)
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
-    def __call__(self, *args, **kwargs):
-        pass
+    def call(self, inputs):
+        x = self.embedding(inputs)
+        x = self.dropout(x)
+        return x
