@@ -1,4 +1,4 @@
 #!/bin/bash
 set -x
 
-python src/sqro.py
+PYTHONPATH=$(pwd) python ai/src/sqro.py

@@ -28,6 +28,7 @@ class TransformerSettings(GeneralSettings):
     """
     Transformer 설정
     """
+    DB_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "../preprocess/datas/phishing_sites_20240917_082423.db"))
 
     embedding_dim: int = 768
     max_token_len: int = 512
@@ -59,7 +60,6 @@ class ConverterSettings(GeneralSettings):
     """
     PreProcessor & HTML2Text converter 설정
     """
-
     # TODO : add me
 
     @classmethod

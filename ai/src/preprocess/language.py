@@ -12,9 +12,10 @@ def filter_english(content: str) -> Optional[str]:
     :param content: 필터링할 텍스트 콘텐츠
     :return: 영어 텍스트 또는 None
     """
+    if content is None:
+        return None
     try:
         if detect(content) == "en":
             return content
     except LangDetectException:
         pass
-    return None

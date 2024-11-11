@@ -29,6 +29,7 @@ uvicorn = "^0.32.0"
 transformers = "^4.45.2"
 python-dotenv = "^1.0.1"
 pandas = "^2.2.3"
+tf-keras = "^2.18.0"
 
 
 [build-system]

@@ -6,11 +6,11 @@ from keras import optimizers
 from tensorflow.test import is_gpu_available
 from tensorflow.config.experimental import list_physical_devices, set_memory_growth
 
-from ai.src.core.settings import GeneralSettings, TransformerSettings
-from ai.src.model.model import MultiModalBert
-from ai.src.utils.logging import setup_logging
-from ai.src.core.exceptions import BackendException
-from ai.src.preprocess.dataset import DataConnector, PreProcessor
+from core.settings import GeneralSettings, TransformerSettings
+from model.model import MultiModalBert
+from utils.logging import setup_logging
+from core.exceptions import BackendException
+from preprocess.dataset import DataConnector, PreProcessor
 
 
 def preprocess_data(connector: DataConnector, processor: PreProcessor):
