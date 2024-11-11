@@ -23,8 +23,12 @@ class F1Score(Metric):
         self.false_negatives.assign_add(fn)
 
     def result(self):
-        precision = self.true_positives / (self.true_positives + self.false_positives + K.epsilon())
-        recall = self.true_positives / (self.true_positives + self.false_negatives + K.epsilon())
+        precision = self.true_positives / (
+            self.true_positives + self.false_positives + K.epsilon()
+        )
+        recall = self.true_positives / (
+            self.true_positives + self.false_negatives + K.epsilon()
+        )
         return 2 * ((precision * recall) / (precision + recall + K.epsilon()))
 
     def reset_states(self):

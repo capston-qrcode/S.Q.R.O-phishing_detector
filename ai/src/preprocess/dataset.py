@@ -15,11 +15,11 @@ from ai.src.preprocess.language import filter_english
 class DataConnector:
     def __init__(self, settings):
         self.logger = setup_logging(settings=settings)
-        self.db_path = settings.DB_PATH  # TODO : 설정에 따라 DB 경로 지정
+        self.db_path = settings.DB_PATH
 
     def _fetch_db(self):
         conn = sqlite3.connect(self.db_path)
-        df = pd.read_sql_query("SELECT * FROM phishing_data", conn)  # TODO : 테이블명 변경
+        df = pd.read_sql_query("SELECT * FROM phishing_data", conn)
         conn.close()
         return df
 

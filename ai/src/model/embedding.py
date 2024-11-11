@@ -8,9 +8,11 @@ from ai.src.core.settings import TransformerSettings
 class CustomEmbedding(Layer):
     def __init__(self, settings: TransformerSettings):
         super(CustomEmbedding, self).__init__()
-        self.embedding = Embedding(input_dim=settings.vocab_size,
-                                   output_dim=settings.embedding_dim,
-                                   trainable=True)
+        self.embedding = Embedding(
+            input_dim=settings.vocab_size,
+            output_dim=settings.embedding_dim,
+            trainable=True,
+        )
         self.dropout = Dropout(settings.embedding_dropout)
 
     def call(self, inputs):
