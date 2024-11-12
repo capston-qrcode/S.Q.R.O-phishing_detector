@@ -1,4 +1,4 @@
-# TODO : adjust F1 score calculation
+# TODO : fix this to use sklearn
 import tensorflow as tf
 
 from keras.api import backend as K  # noqa

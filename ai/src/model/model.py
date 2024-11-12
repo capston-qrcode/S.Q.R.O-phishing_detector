@@ -12,12 +12,11 @@ from ai.src.core.settings import TransformerSettings
 class MultiModalBert(Model):
     def __init__(self, settings: TransformerSettings):
         super(MultiModalBert, self).__init__()
-
-        self.logger = setup_logging(settings)
         self.html_bert = TFBertModel.from_pretrained("bert-base-uncased")
         self.url_bert = TFBertModel.from_pretrained("bert-base-uncased")
 
-        self.fc = Dense(settings.embedding_dim, activation="gelu")
+        # Fully Connected Layer 및 드롭아웃
+        self.fc = Dense(settings.embedding_dim * 2, activation="gelu")  # 논문 기준, 2 * 768 크기로 확장
         self.dropout = Dropout(settings.embedding_dropout)
         self.classifier = Dense(1, activation="sigmoid")
 
@@ -25,7 +24,7 @@ class MultiModalBert(Model):
         url_output = self.url_bert(url_input, attention_mask=url_mask)[1]
         html_output = self.html_bert(text_input, attention_mask=text_mask)[1]
 
-        # 결합
+        # BERT 출력 결합
         combined_output = Concatenate()([url_output, html_output])
         x = self.fc(combined_output)
         x = self.dropout(x)

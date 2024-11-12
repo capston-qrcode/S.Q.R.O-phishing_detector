@@ -32,7 +32,7 @@ class TransformerSettings(GeneralSettings):
     DB_PATH = os.path.abspath(
         os.path.join(
             os.path.dirname(__file__),
-            "../preprocess/datas/phishing_sites_20240917_082423.db",
+            "../preprocess/datas/test_database.db",
         )
     )
 

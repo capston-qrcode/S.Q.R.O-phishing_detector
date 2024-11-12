@@ -1,8 +1,12 @@
 # --------------------------------------------------------------------------
 # AI 모델 핵심 로직들을 호출하는 엔드포인트 모듈입니다.
 # --------------------------------------------------------------------------
+import keras
+import tensorflow as tf
+
 from dotenv import load_dotenv
-from keras import optimizers
+from keras.src.optimizers import Adam
+from keras.src.optimizers.schedules import PolynomialDecay
 from tensorflow.test import is_gpu_available
 from tensorflow.config.experimental import list_physical_devices, set_memory_growth
 
@@ -10,54 +14,65 @@ from core.settings import GeneralSettings, TransformerSettings
 from model.model import MultiModalBert
 from utils.logging import setup_logging
 from core.exceptions import BackendException
+from model.evaluate import F1Score
 from preprocess.dataset import DataConnector, PreProcessor
 
 
 def preprocess_data(connector: DataConnector, processor: PreProcessor):
-    """
-    데이터베이스에서 데이터를 가져와 URL과 HTML 텍스트를 추출하고,
-    이를 BERT 모델에 입력할 수 있도록 전처리합니다.
-    """
     df = connector.get_filtered_data()
-    url_inputs, text_inputs, labels = [], [], []
+    url_inputs, text_inputs, url_masks, text_masks, labels = [], [], [], [], []
 
-    for index, row in df.iterrows():
-        urls, text = processor.preprocess_text(row["html_content"])
-        url_inputs.append(urls)
-        text_inputs.append(text)
-        labels.append(row["label"])  # 라벨 필드
+    for _, row in df.iterrows():
+        url_encoded, url_mask = processor.preprocess_url(row["url"])
+        text_encoded, text_mask = processor.preprocess_text(row["html_content"])
 
-    return url_inputs, text_inputs, labels
+        # 둘 중 하나라도 데이터가 없으면 무시
+        if url_encoded.shape[0] == 0 or text_encoded.shape[0] == 0:
+            continue
+
+        url_inputs.append(url_encoded)
+        text_inputs.append(text_encoded)
+        url_masks.append(url_mask)
+        text_masks.append(text_mask)
+        labels.append(row["label"])
+
+    url_inputs = tf.stack(url_inputs)
+    text_inputs = tf.stack(text_inputs)
+    url_masks = tf.stack(url_masks)
+    text_masks = tf.stack(text_masks)
+    labels = tf.convert_to_tensor(labels)
+    return url_inputs, url_masks, text_inputs, text_masks, labels
 
 
 def run_backend(settings) -> None:
     """
     main routine에서 호출하는 피싱 사이트 탐지기 엔드포인트.
     """
-    # Data preparation
     connector = DataConnector(settings)
-    processor = PreProcessor(settings)
-    X_train_url, X_train_text, y_train = preprocess_data(
-        connector, processor
-    )  # noqa: N806
+    processor = PreProcessor()
+    X_train_url, X_train_url_mask, X_train_text, X_train_text_mask, y_train = preprocess_data(connector, processor)
 
-    # Create the model
     model = MultiModalBert(settings=settings)
 
-    # 컴파일 및 학습
+    lr_schedule = PolynomialDecay(
+        initial_learning_rate=settings.learning_rate,
+        decay_steps=10000,
+        end_learning_rate=1e-7
+    )
+    optimizer = Adam(learning_rate=lr_schedule)
+
     model.compile(
-        optimizer=optimizers.Adam(learning_rate=settings.learning_rate),
+        optimizer=optimizer,
         loss="binary_crossentropy",
-        metrics=["accuracy"],
+        metrics=["accuracy", F1Score()]
     )
 
-    # 모델 학습
     model.fit(
-        [X_train_url, X_train_text],
+        [X_train_url, X_train_url_mask, X_train_text, X_train_text_mask],
         y_train,
         batch_size=settings.batch_size,
         epochs=settings.epoch,
-        validation_split=0.2,
+        validation_split=0.2
     )
 
     model.evaluate()
