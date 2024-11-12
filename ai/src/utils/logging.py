@@ -1,6 +1,6 @@
 import logging
 
-from ai.src.core.settings import GeneralSettings
+from src.core.settings import GeneralSettings
 
 
 def setup_logging(settings: GeneralSettings) -> logging.Logger:

@@ -1,4 +1,4 @@
 #!/bin/bash
 set -x
 
-PYTHONPATH=$(pwd) python ai/src/sqro.py
+PYTHONPATH=$(pwd) python src/train.py
